@@ -11,23 +11,39 @@ public class InMemoryBookRepository implements BookRepository {
     private final AtomicLong nextId = new AtomicLong(1);
 
     @Override
-    public Long nextId(){
+    public Long nextId() {
         return nextId.getAndIncrement();
     }
 
     @Override
-    public Book save(Book book){
+    public Book save(Book book) {
         booksById.put(book.getId(), book);
         return book;
     }
 
     @Override
-    public List<Book> findAll(){
+    public List<Book> findAll() {
         return new ArrayList<>(booksById.values());
     }
 
     @Override
-    public Optional<Book> findById(Long id){
+    public Optional<Book> findById(Long id) {
         return Optional.ofNullable(booksById.get(id));
+    }
+
+    @Override
+    public Optional<Book> findByIsbn(String isbn) {
+        for (Book book : booksById.values()) {
+            if (book.getIsbn().equals(isbn)) {
+                return Optional.of(book);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        booksById.remove(id);
     }
 }
