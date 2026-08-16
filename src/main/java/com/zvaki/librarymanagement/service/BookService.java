@@ -7,6 +7,7 @@ import com.zvaki.librarymanagement.repository.BookRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class BookService {
     private final BookRepository bookRepository;
@@ -48,10 +49,41 @@ public class BookService {
         return bookRepository.save(bookToArchive);
     }
 
+    public Book updateBook(Long id, String title, String authorName, String isbn, Integer publicationYear) {
+        Book bookToUpdate = getBookById(id);
+
+        ensureIsbnIsNotTakenByAnotherBook(id, isbn);
+
+        bookToUpdate.updateDetails(title, authorName, isbn, publicationYear);
+
+        return bookRepository.save(bookToUpdate);
+    }
+
+    public void deleteBook(Long id) {
+        ensureBookExists(id);
+        bookRepository.deleteById(id);
+    }
+
     private void ensureIsbnIsNotTaken(String isbn) {
         if (bookRepository.findByIsbn(isbn).isPresent()) {
             throw new DuplicateIsbnException(isbn);
         }
+    }
+
+    private void ensureIsbnIsNotTakenByAnotherBook(Long bookId, String isbn) {
+        Optional<Book> foundBook = bookRepository.findByIsbn(isbn);
+
+        if (foundBook.isEmpty()) {
+            return;
+        }
+
+        if (!foundBook.get().getId().equals(bookId)) {
+            throw new DuplicateIsbnException(isbn);
+        }
+    }
+
+    private void ensureBookExists(Long id) {
+        getBookById(id);
     }
 
 }
