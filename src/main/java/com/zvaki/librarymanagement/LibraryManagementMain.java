@@ -73,6 +73,40 @@ public class LibraryManagementMain {
         runScenario("Try to get deleted book", () -> {
             bookService.getBookById(book1.getId());
         });
+
+        System.out.println("\n--- Scenario: archiving a borrowed book ---");
+
+        Book book2 = bookService.createBook(
+                "The Pragmatic Programmer",
+                "Andrew Hunt",
+                "ISBN-222",
+                1999
+        );
+
+        bookService.borrowBook(book2.getId());
+
+        runScenario("Try to archive a borrowed book", () -> {
+            bookService.archiveBook(book2.getId());
+        });
+
+        System.out.println("\n--- Scenario: archiving twice is idempotent ---");
+
+        bookService.returnBook(book2.getId());
+        Book archivedOnce = bookService.archiveBook(book2.getId());
+        System.out.println("After first archive: " + archivedOnce.getStatus());
+
+        Book archivedTwice = bookService.archiveBook(book2.getId());
+        System.out.println("After second archive: " + archivedTwice.getStatus());
+
+        System.out.println("\n--- Scenario: invalid publication year ---");
+        runScenario("Try to create a book published in the future", () -> {
+            bookService.createBook(
+                    "Time Traveler's Guide",
+                    "Future Author",
+                    "ISBN-333",
+                    9999
+            );
+        });
     }
 
     private static void runScenario(String scenarioName, Runnable action) {
