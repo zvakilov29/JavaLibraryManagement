@@ -1,6 +1,7 @@
 package com.zvaki.librarymanagement;
 
 import com.zvaki.librarymanagement.domain.Book;
+import com.zvaki.librarymanagement.dto.CreateBookRequest;
 import com.zvaki.librarymanagement.repository.BookRepository;
 import com.zvaki.librarymanagement.repository.InMemoryBookRepository;
 import com.zvaki.librarymanagement.service.BookService;
@@ -107,6 +108,10 @@ public class LibraryManagementMain {
                     9999
             );
         });
+
+        CreateBookRequest request = new CreateBookRequest("Clean Code", "Martin", "ISBN-111", 2008);
+        System.out.println(request);
+        System.out.println(request.title());
     }
 
     private static void runScenario(String scenarioName, Runnable action) {

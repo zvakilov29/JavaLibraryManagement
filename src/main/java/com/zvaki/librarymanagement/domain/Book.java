@@ -1,5 +1,7 @@
 package com.zvaki.librarymanagement.domain;
 
+import com.zvaki.librarymanagement.exception.InvalidBookStateException;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -79,7 +81,7 @@ public class Book {
 
     public void borrow() {
         if (this.status != BookStatus.AVAILABLE) {
-            throw new IllegalStateException("The book is not currently available for borrowing");
+            throw new InvalidBookStateException("The book is not currently available for borrowing");
         }
 
         this.status = BookStatus.BORROWED;
@@ -88,7 +90,7 @@ public class Book {
 
     public void returnBook() {
         if (this.status != BookStatus.BORROWED) {
-            throw new IllegalStateException("The book is either archived or already available and cannot be returned");
+            throw new InvalidBookStateException("The book is either archived or already available and cannot be returned");
         }
 
         this.status = BookStatus.AVAILABLE;
@@ -103,8 +105,7 @@ public class Book {
         }
 
         if (this.status == BookStatus.BORROWED) {
-            throw new IllegalStateException(
-                    "A borrowed book cannot be archived; it must be returned first");
+            throw new InvalidBookStateException("A borrowed book cannot be archived; it must be returned first");
         }
 
         this.status = BookStatus.ARCHIVED;

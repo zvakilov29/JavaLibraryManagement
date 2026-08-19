@@ -4,11 +4,13 @@ import com.zvaki.librarymanagement.domain.Book;
 import com.zvaki.librarymanagement.exception.BookNotFoundException;
 import com.zvaki.librarymanagement.exception.DuplicateIsbnException;
 import com.zvaki.librarymanagement.repository.BookRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Service
 public class BookService {
     private final BookRepository bookRepository;
 

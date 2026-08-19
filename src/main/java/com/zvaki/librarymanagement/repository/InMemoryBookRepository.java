@@ -1,10 +1,12 @@
 package com.zvaki.librarymanagement.repository;
 
 import com.zvaki.librarymanagement.domain.Book;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Component
 public class InMemoryBookRepository implements BookRepository {
 
     private final Map<Long, Book> booksById = new LinkedHashMap<>();

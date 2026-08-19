@@ -1,5 +1,6 @@
 package com.zvaki.librarymanagement.domain;
 
+import com.zvaki.librarymanagement.exception.InvalidBookStateException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,6 @@ public class BookTest {
 
         book.borrow();
 
-        assertThrows(IllegalStateException.class, () -> book.borrow());
+        assertThrows(InvalidBookStateException.class, () -> book.borrow());
     }
 }
